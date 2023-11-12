@@ -1,0 +1,38 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/milkchat
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 737999732056-hqmgnqno9qba36kl7esgb6s9eqkoembm.apps.googleusercontent.com
+            client-secret: "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"
+            redirect-uri: "http://localhost:8080/login/oauth2/code/google"
+            scope:
+              - email
+              - profile
+              - openid
+              - https://www.googleapis.com/auth/calendar
+
+jwt:
+  secret: honyanyaynaynaynaynaringaringaringa
+  expiration: 86400000
+
+
+fcm:
+  certification: milkchat-4141a-firebase-adminsdk-c48dt-258e07105b.json
+
+google:
+  calendar:
+    list:
+      request-url: "https://www.googleapis.com/calendar/v3/users/me/calendarList?"
+    add-event:
+      request-url: "https://www.googleapis.com/calendar/v3/calendars/" # + {calendar_id} + /events
+
+server:
+  servlet:
+    session:
+      cookie:
+        same-site: lax

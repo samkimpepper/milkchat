@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-analytics.js"></script>
+
+</head>
+<body>
+    
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDeBUZAhcooiRtT1s-OmPYhioV0Rv_mrUk",
+  authDomain: "milkchat-4141a.firebaseapp.com",
+  projectId: "milkchat-4141a",
+  storageBucket: "milkchat-4141a.appspot.com",
+  messagingSenderId: "886935473959",
+  appId: "1:886935473959:web:c9b5daafc4f46188152302",
+  measurementId: "G-2NYF2SJPZH"
+};
+
+// Initialize Firebase
+const app = firebase.initializeApp(firebaseConfig);
+//const analytics = firebase.getAnalytics(app);
+const access_token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlckBnbWFpbC5jb20iLCJpYXQiOjE2OTk0ODc0MjEsImV4cCI6MTY5OTQ4ODMyMX0.t0Z1UW9g8sNBmH9IgA_Q9rRah-omPyIUcPUTW8Jbbss';
+
+const messsaging = firebase.messaging();
+messaging.usePublicVapidKey("BPDuU0WOBxg5HNChueVvEv7pvG_BLUYdYln-5Nu3B1UdV2buSO6FZHynqLrsKs9KxdRCYm2MNnDJoOqmzQtR");
+Notification.requestPermission().then((permission) => {
+    if (permission === 'granted') {
+        console.log('Notification permission granted.');
+        // TODO(developer): Retrieve an Instance ID token for use with FCM.
+        messaging.getToken().then((currentToken) => {
+            if (currentToken) {
+                console.log(currentToken);
+                var data = {
+                    'token': currentToken,
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/user/fcm-token',
+                    data: JSON.stringify(data),
+                    headers: {
+                        'Authorization': 'Bearer ' + access_token
+                    },
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            } else {
+                // Show permission request.
+                console.log('No Instance ID token available. Request permission to generate one.');
+            }
+        }).catch((err) => {
+            console.log('An error occurred while retrieving token. ', err);
+        
+        })
+    } else {
+        console.log('Unable to get permission to notify.');
+    }
+});
+    
+</script>
+</body>
+</html>

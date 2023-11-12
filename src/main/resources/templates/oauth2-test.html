@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <a href="http://localhost:8080/login/oauth2/authorization/google">Google</a>
+
+<script>
+    const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5b3Vyc2lkZTE5QGdtYWlsLmNvbSIsImlhdCI6MTY5OTc0NTM1MiwiZXhwIjoxNjk5NzQ2MjUyfQ.r2Vgzjl9wzakwzlaxvDHO7CH4Jg5Kl0vNWF05YPG5cQ";
+
+    $.ajax({
+        url: 'http://localhost:8080/api/test/calendar/list',
+        type: 'GET',
+        dataType: 'json',
+        headers: {
+            'Authorization': 'Bearer '+ token
+        },
+        success: function(data) {
+            console.log(data);
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
+    });
+
+</script>
+</body>
+</html>
