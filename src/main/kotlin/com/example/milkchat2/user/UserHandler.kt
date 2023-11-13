@@ -2,7 +2,7 @@ package com.example.milkchat2.user
 
 import com.example.milkchat2.SecurityUtils
 import com.example.milkchat2.auth.OAuth2TokenService
-import com.example.milkchat2.infra.FcmPushClient
+import com.example.milkchat2.infra.fcm.FcmPushClient
 import com.example.milkchat2.user.dto.LoginRequest
 import com.example.milkchat2.user.dto.RegisterRequest
 import com.example.milkchat2.user.dto.UpdateRequest
@@ -10,11 +10,8 @@ import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.http.MediaType
 import org.springframework.security.core.context.ReactiveSecurityContextHolder
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.*
-import org.springframework.web.server.ServerWebExchange
 
 @Component
 class UserHandler(
@@ -122,6 +119,7 @@ class UserHandler(
 
     suspend fun oauth2Test(serverRequest: ServerRequest): ServerResponse {
         val email = SecurityUtils.currentUser().awaitFirst()
+        println("OAuth2 principal: $email")
 
         val auth = SecurityUtils.curretOAuth2UserInfo().awaitFirst()
 

@@ -42,7 +42,7 @@ class ReservationHandler(
     suspend fun reject(serverRequest: ServerRequest): ServerResponse {
         val reservationId = serverRequest.pathVariable("reservationId")
 
-        reservationService.rejectReservation(reservationId)
+        reservationService.rejectReservation(reservationId, serverRequest.exchange())
 
         return ServerResponse.ok().buildAndAwait()
     }

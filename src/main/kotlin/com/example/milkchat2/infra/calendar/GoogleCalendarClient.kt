@@ -65,7 +65,6 @@ class GoogleCalendarClient(
             start = EventDateTime(startDateTime, "Asia/Seoul"),
             end = EventDateTime(endDateTime, "Asia/Seoul"),
         )
-        println(startDateTime)
 
         val webClient = WebClient.create()
         val response = webClient.post()
@@ -73,6 +72,20 @@ class GoogleCalendarClient(
                 .header("Authorization", "Bearer $accessToken")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(addCalendarEventRequest)
+                .retrieve()
+                .bodyToMono(String::class.java)
+                .awaitFirst()
+
+        println(response)
+    }
+
+    suspend fun deleteEvent(calendarId: String, eventId: String, exchange: ServerWebExchange) {
+        val accessToken = oAuth2TokenService.getAccessToken(exchange).awaitFirst()
+
+        val webClient = WebClient.create()
+        val response = webClient.delete()
+                .uri("${addEventRequestURL}/${calendarId}/events/${eventId}")
+                .header("Authorization", "Bearer $accessToken")
                 .retrieve()
                 .bodyToMono(String::class.java)
                 .awaitFirst()

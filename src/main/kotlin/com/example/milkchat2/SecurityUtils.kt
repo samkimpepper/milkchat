@@ -23,8 +23,6 @@ object SecurityUtils {
                         else -> Mono.empty()
                     }
                 }
-//                .map { it.principal }
-//                .cast(String::class.java)
     }
 
     fun curretOAuth2UserInfo(): Mono<OAuth2AuthenticationToken> {

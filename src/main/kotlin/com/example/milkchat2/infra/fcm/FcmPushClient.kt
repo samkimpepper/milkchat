@@ -1,4 +1,4 @@
-package com.example.milkchat2.infra
+package com.example.milkchat2.infra.fcm
 
 import com.example.milkchat2.user.model.User
 import com.google.auth.oauth2.GoogleCredentials

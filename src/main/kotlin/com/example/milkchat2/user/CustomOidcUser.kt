@@ -9,9 +9,6 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser
 class CustomOidcUser(
     val user: User,
     val originalOidcUser: OidcUser,
-//    val authorities: Collection<GrantedAuthority>,
-//    val idToken: OidcIdToken,
-//    val userInfo: OidcUserInfo,
 ): OidcUser by originalOidcUser {
     override fun getName(): String {
         return user.nickname!!

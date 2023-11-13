@@ -7,8 +7,8 @@ import com.example.milkchat2.reservation.dto.RequestRequest
 import com.example.milkchat2.reservation.model.Duration
 import com.example.milkchat2.reservation.model.Reservation
 import com.example.milkchat2.reservation.model.ReservationStatus
-import com.example.milkchat2.reservation.model.UserInfo
 import com.example.milkchat2.user.UserRepository
+import com.example.milkchat2.user.dto.UserInfo
 import com.example.milkchat2.user.model.User
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ServerWebExchange
@@ -20,7 +20,7 @@ import java.time.format.DateTimeFormatter
 interface ReservationService {
     suspend fun requestReservation(sender: User, receiver: User, requestRequest: RequestRequest)
     suspend fun acceptReservation(reservationId: String, exchange: ServerWebExchange)
-    suspend fun rejectReservation(reservationId: String)
+    suspend fun rejectReservation(reservationId: String, exchange: ServerWebExchange)
     suspend fun createReservation(sender: User, receiver: User, exchange: ServerWebExchange)
 }
 
@@ -70,12 +70,17 @@ class ReservationServiceImpl(
         }
     }
 
-    override suspend fun rejectReservation(reservationId: String) {
+    override suspend fun rejectReservation(reservationId: String, exchange: ServerWebExchange) {
         var reservation = reservationRepository.findById(reservationId) ?: throw Exception("Reservation not found")
 
         val sender = reservation.accepter?.let { userRepository.findById(it.id) }
 
         reservation.requester?.let { notificationService.send(sender!!, it.id, NotificationType.CHAT_REJECT, "") }
+
+        if (sender != null && sender.provider == "google") {
+            googleCalendarClient.deleteEvent(sender.email!!, reservation.googleCalendarEventId!!, exchange)
+        }
+
 
         reservationRepository.deleteById(reservationId)
     }

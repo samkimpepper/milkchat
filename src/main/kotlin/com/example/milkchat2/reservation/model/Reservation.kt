@@ -1,5 +1,6 @@
 package com.example.milkchat2.reservation.model
 
+import com.example.milkchat2.user.dto.UserInfo
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDate
@@ -7,24 +8,20 @@ import java.time.LocalTime
 
 @Document
 data class Reservation(
-    @Id
+        @Id
     val id: String? = null,
 
-    var reservationDate: LocalDate,
+        var reservationDate: LocalDate,
 
-    var reservationTime: LocalTime,
+        var reservationTime: LocalTime,
 
-    var duration: Duration,
+        var duration: Duration,
 
-    var status: ReservationStatus = ReservationStatus.PENDING,
+        var status: ReservationStatus = ReservationStatus.PENDING,
 
-    var requester: UserInfo?,
+        var requester: UserInfo?,
 
-    var accepter: UserInfo?
-)
+        var accepter: UserInfo?,
 
-data class UserInfo(
-    val id: String,
-    val nickname: String,
-    val email: String,
+        var googleCalendarEventId: String? = null,
 )

@@ -27,7 +27,6 @@ class UserRouter(private val userHandler: UserHandler) {
         "/oauth2".nest {
             GET("", userHandler::getOAuth2Page)
             GET("/callback", userHandler::oauth2Test)
-
         }
     }
 }
