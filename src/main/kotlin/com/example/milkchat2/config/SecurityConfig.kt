@@ -53,6 +53,7 @@ class SecurityConfig(
                     exchanges ->
                     exchanges
                             .pathMatchers("/api/user/**").permitAll()
+                            .pathMatchers("/test/**").permitAll()
 //                            .pathMatchers("/oauth2/**").permitAll()
 //                            .pathMatchers("/login/oauth2/**").permitAll()
                             .anyExchange().authenticated()

@@ -38,7 +38,7 @@ class ReservationServiceImpl(
 
         val duration = Duration.fromMinutes(requestRequest.duration) ?: throw Exception("Invalid duration value")
 
-        val reservation = Reservation(
+        var reservation = Reservation(
                 requester = UserInfo(sender.id!!, sender.nickname!!, sender.email!!),
                 accepter = UserInfo(receiver.id!!, receiver.nickname!!, receiver.email!!),
                 reservationDate = LocalDate.parse(requestRequest.reservationDate, dateFormatter),
@@ -46,7 +46,7 @@ class ReservationServiceImpl(
                 duration = duration,
         )
 
-        reservationRepository.save(reservation)
+        reservation = reservationRepository.save(reservation)
 
         val link = "/api/reservation/accept/${reservation.id}"
         notificationService.send(sender, requestRequest.receiverId, NotificationType.CHAT_REQUEST, link)

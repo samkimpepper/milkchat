@@ -5,6 +5,7 @@ import com.example.milkchat2.chat.model.Chat
 import com.example.milkchat2.chat.model.ChatStatus
 import com.example.milkchat2.reservation.model.Reservation
 import com.example.milkchat2.user.dto.UserInfo
+import com.example.milkchat2.user.model.User
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.awaitFirst
@@ -13,6 +14,7 @@ import org.springframework.scheduling.TaskScheduler
 import org.springframework.stereotype.Service
 import java.time.Duration
 import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
@@ -89,7 +91,7 @@ class ChatSchedulerService(
         val connection = rSocketConnectionManager.getConnection(chatId)
 
         connection?.values?.forEach { requester ->
-            requester.route("chat.message").data(message).send()
+            requester.route("message.outgoing").data(message).send()
         }
     }
 
@@ -101,5 +103,39 @@ class ChatSchedulerService(
             throw Exception("User not part of the chat")
 
         return chat
+    }
+
+    suspend fun onConnectForTest(requester: RSocketRequester, email: String, chatId: String) {
+        //val chat = chatRepository.findByStatusAndId(ChatStatus.OPEN, chatId)?: throw Exception("Chat not yet open")
+        val chat = chatRepository.findById(chatId)?: throw Exception("Chat not found")
+
+        val isUserInChat = chat.users.any { user -> user.email == email }
+        if (!isUserInChat)
+            throw Exception("User not part of the chat")
+
+        rSocketConnectionManager.addConnection(chat.id!!, email, requester)
+    }
+
+    suspend fun openChatForTest(testuser: User, testuser2: User) {
+        val testuserInfo = UserInfo(
+            id = testuser.id!!,
+            email = testuser.email!!,
+            nickname = testuser.nickname!!,
+        )
+        val testuser2Info = UserInfo(
+            id = testuser2.id!!,
+            email = testuser2.email!!,
+            nickname = testuser2.nickname!!,
+        )
+        var users: MutableSet<UserInfo> = mutableSetOf(testuserInfo, testuser2Info)
+
+        var chat = Chat(
+                users = users,
+                status = ChatStatus.OPEN,
+                expirationTime = LocalDateTime.now().plusMonths(1L),
+        )
+
+        chatRepository.save(chat)
+
     }
 }

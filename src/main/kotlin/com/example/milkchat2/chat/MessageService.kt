@@ -8,11 +8,11 @@ class MessageService(
         private val messageRepository: MessageRepository,
 ) {
 
-    suspend fun saveMessage(chatId: String, senderId: String, content: String) {
+    suspend fun saveMessage(chatId: String, senderEmail: String, content: String) {
         val message = Message(
             chatId = chatId,
             content = content,
-            sender = senderId,
+            sender = senderEmail,
         )
 
         messageRepository.save(message)

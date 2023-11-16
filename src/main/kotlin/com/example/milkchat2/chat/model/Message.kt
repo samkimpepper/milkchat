@@ -13,4 +13,8 @@ data class Message(
     val sender: String,
 
     // TODO: createdAt
-)
+) {
+    fun isNotFromSender(email: String): Boolean {
+        return this.sender != email
+    }
+}

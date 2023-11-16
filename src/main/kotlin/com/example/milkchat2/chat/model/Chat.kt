@@ -7,12 +7,12 @@ import java.time.LocalDateTime
 
 @Document
 data class Chat(
-        @Id
+    @Id
     var id: String? = null,
 
-        var users: MutableSet<UserInfo> = mutableSetOf(),
+    var users: MutableSet<UserInfo> = mutableSetOf(),
 
-        var status: ChatStatus,
+    var status: ChatStatus,
 
-        var expirationTime: LocalDateTime,
+    var expirationTime: LocalDateTime,
 )
